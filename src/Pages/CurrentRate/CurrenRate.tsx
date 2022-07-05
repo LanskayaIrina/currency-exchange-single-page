@@ -1,65 +1,132 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { setRate } from "../../store/rateReducer";
+import { setBase, setRate } from "../../store/rateReducer";
+import { useHttp } from "../../hooks/http";
 import { RootState } from "../../store/store";
 
+import { LoadingSpinner } from "../../UI/LoadingSpinner";
+import { CustomizedSnackbars } from "../../UI/CustomizedSnackbars";
+
 import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
+import { Autocomplete } from "@mui/material";
 import "./CurrentRate.scss";
 
 export const CurrenRate = () => {
-  const [baseCurrencyInputValue, setBaseCurrencyInputValue] = useState("USD");
+  const [baseCurrencyInputValue, setBaseCurrencyInputValue] = useState("");
+  const [isOpenErrorSnackbar, setIsOpenErrorSnackbar] = useState(false);
 
-  const base = useSelector((state: RootState) => state.rate.base);
+  const { base, firstValue, secondValue } = useSelector(
+    (state: RootState) => state.rate
+  );
+  const { currencies, loading } = useSelector(
+    (state: RootState) => state.currencies
+  );
+
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    setBaseCurrencyInputValue(base);
-  }, [base]);
+  const { data, isLoading, error: rateError, sendRequest } = useHttp();
 
-  const handleChange = (event: SelectChangeEvent) => {
-    dispatch(setRate({ base: event.target.value as string, firstValue: "3" }));
+  const baseFromStorage = localStorage.getItem("base");
+
+  useEffect(() => {
+    if (data && !isLoading && !rateError) {
+      dispatch(
+        setRate({
+          base,
+          firstValue: data.rates["USD"],
+          secondValue: data.rates["EUR"],
+        })
+      );
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (baseFromStorage) {
+      dispatch(setBase({ base: baseFromStorage }));
+      setBaseCurrencyInputValue(baseFromStorage);
+    } else {
+      setBaseCurrencyInputValue(base);
+    }
+  }, [sendRequest]);
+
+  useEffect(() => {
+    if (baseCurrencyInputValue) {
+      sendRequest(
+        `https://api.apilayer.com/exchangerates_data/latest?symbols=${[
+          baseCurrencyInputValue,
+          "EUR",
+          "USD",
+        ]}&base=${baseCurrencyInputValue}`
+      );
+    }
+  }, [baseCurrencyInputValue, sendRequest]);
+
+  useEffect(() => {
+    if (rateError) {
+      setIsOpenErrorSnackbar(true);
+    }
+  }, [rateError]);
+
+  const handleChange = (event: { label: string; key: string }) => {
+    dispatch(setBase({ base: event.key }));
+    setBaseCurrencyInputValue(event.key);
+    localStorage.setItem("base", event.key);
   };
 
   return (
-    <Box sx={{ minWidth: 120 }}>
-      <FormControl fullWidth>
-        <InputLabel id="base-currency-select-label">Base currency</InputLabel>
-        <Select
-          labelId="base-currency-select-label"
-          id="base-currency-select-label"
-          value={baseCurrencyInputValue}
-          label="Base currency"
-          onChange={handleChange}
+    <>
+      {isOpenErrorSnackbar && (
+        <CustomizedSnackbars isOpen={isOpenErrorSnackbar} message={rateError} />
+      )}
+      {(!loading || !isLoading) && !!currencies?.length && (
+        <Box sx={{ minWidth: 120 }}>
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            onChange={(event, newValue) => {
+              if (newValue) {
+                handleChange(newValue);
+              }
+            }}
+            options={currencies.map((c) => ({ label: c.value, key: c.key }))}
+            sx={{ width: 300 }}
+            renderInput={(params) => (
+              <TextField {...params} label="Currencies" />
+            )}
+          />
+          <Box className="rate-textField-container" mt={2}>
+            <TextField
+              id="USD"
+              label="USD"
+              variant="outlined"
+              value={firstValue}
+              disabled
+            />
+          </Box>
+          <Box mt={2} className="rate-textField-container">
+            <TextField
+              id="EUR"
+              label="EUR"
+              value={secondValue}
+              variant="outlined"
+              disabled
+            />
+          </Box>
+        </Box>
+      )}
+      {(loading || isLoading) && (
+        <Box
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+          }}
         >
-          <MenuItem value={"EUR"}>EUR</MenuItem>
-          <MenuItem value={"UAH"}>UAH</MenuItem>
-          <MenuItem value={"USD"}>USD</MenuItem>
-        </Select>
-      </FormControl>
-      <Box className="rate-textField-container" mt={2}>
-        <TextField
-          id={baseCurrencyInputValue === "USD" ? "UAH" : "USD"}
-          label={baseCurrencyInputValue === "USD" ? "UAH" : "USD"}
-          variant="outlined"
-          value={""}
-          disabled
-        />
-      </Box>
-      <Box mt={2} className="rate-textField-container">
-        <TextField
-          id="EUR"
-          label="EUR"
-          value={""}
-          variant="outlined"
-          disabled
-        />
-      </Box>
-    </Box>
+          <LoadingSpinner />
+        </Box>
+      )}
+    </>
   );
 };

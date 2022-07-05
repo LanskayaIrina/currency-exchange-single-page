@@ -11,6 +11,9 @@ $border-color: rgba(0, 0, 0, 0.3);
 }
 
 .exchange-select-container {
+  .css-viou3o-MuiAutocomplete-root {
+    max-width: 250px;
+  }
   & .MuiFormControl-root {
     margin-bottom: 1rem;
   }

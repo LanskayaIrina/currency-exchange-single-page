@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import rateReducer from "./rateReducer";
 import convertorReducer from "./convertorReducer";
+import currenciesReducer from "./currenciesReducer";
 
 export const store = configureStore({
   reducer: {
     rate: rateReducer,
     convertor: convertorReducer,
+    currencies: currenciesReducer,
   },
 });
 
