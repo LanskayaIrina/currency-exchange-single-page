@@ -1,0 +1,17 @@
+@use '../../styles/_colors.scss';
+
+$border-color: rgba(0, 0, 0, 0.3);
+
+.rate-container {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid $border-color;
+  border-radius: 10px;
+  padding: 2rem;
+}
+
+.exchange-select-container {
+  & .MuiFormControl-root {
+    margin-bottom: 1rem;
+  }
+}
