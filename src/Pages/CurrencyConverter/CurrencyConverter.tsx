@@ -1,4 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+import { RootState } from "../../store/store";
+import { setValues } from "../../store/convertorReducer";
+
+import { useSelector, useDispatch } from "react-redux";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -17,6 +22,21 @@ type InputValue = typeof initialState;
 
 export const CurrencyConverter = () => {
   const [state, setState] = useState<InputValue>(initialState);
+
+  const { from, to, amount } = useSelector(
+    (state: RootState) => state.convertor
+  );
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(
+      setValues({ from: state.from, to: state.to, amount: state.amount })
+    );
+  }, [state]);
+
+  useEffect(() => {
+    setState({ from, to, amount });
+  }, []);
 
   const selectHandleChange = (event: SelectChangeEvent) => {
     if (event.target.name === "to-select") {

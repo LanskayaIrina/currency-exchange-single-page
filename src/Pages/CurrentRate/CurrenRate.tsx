@@ -1,4 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import { setRate } from "../../store/rateReducer";
+import { RootState } from "../../store/store";
+
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -10,8 +15,15 @@ import "./CurrentRate.scss";
 export const CurrenRate = () => {
   const [baseCurrencyInputValue, setBaseCurrencyInputValue] = useState("USD");
 
+  const base = useSelector((state: RootState) => state.rate.base);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setBaseCurrencyInputValue(base);
+  }, [base]);
+
   const handleChange = (event: SelectChangeEvent) => {
-    setBaseCurrencyInputValue(event.target.value as string);
+    dispatch(setRate({ base: event.target.value as string, firstValue: "3" }));
   };
 
   return (

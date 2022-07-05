@@ -17,19 +17,17 @@ const CurrencyConvertor = React.lazy(() =>
 
 function App() {
   return (
-    <>
-      <Layout>
-        <Suspense fallback={<div className="centered">loading</div>}>
-          <Routes>
-            <Route path="/" element={<CurrentRate />} />
+    <Layout>
+      <Suspense fallback={<div className="centered">loading</div>}>
+        <Routes>
+          <Route path="/" element={<CurrentRate />} />
 
-            <Route path="/currency-converter" element={<CurrencyConvertor />} />
+          <Route path="/currency-converter" element={<CurrencyConvertor />} />
 
-            <Route path="*">{/*<NoFound />*/}</Route>
-          </Routes>
-        </Suspense>
-      </Layout>
-    </>
+          <Route path="*">{/*<NoFound />*/}</Route>
+        </Routes>
+      </Suspense>
+    </Layout>
   );
 }
 
