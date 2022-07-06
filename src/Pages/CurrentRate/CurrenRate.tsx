@@ -75,6 +75,14 @@ export const CurrenRate = () => {
     localStorage.setItem("base", event.key);
   };
 
+  const currentCurrency = currencies.find(
+    (c) => c.key === baseCurrencyInputValue
+  );
+  const autocompleteValue = {
+    label: currentCurrency?.value || "",
+    key: currentCurrency?.key || "",
+  };
+
   return (
     <>
       {isOpenErrorSnackbar && (
@@ -83,12 +91,17 @@ export const CurrenRate = () => {
       {(!loading || !isLoading) && !!currencies?.length && (
         <Box sx={{ minWidth: 120 }}>
           <Autocomplete
+            className="custom-autocomplete"
             disablePortal
-            id="combo-box-demo"
+            id="custom-autocomplete"
+            value={autocompleteValue}
             onChange={(event, newValue) => {
               if (newValue) {
                 handleChange(newValue);
               }
+            }}
+            isOptionEqualToValue={(option, value) => {
+              return option.key === value.key;
             }}
             options={currencies.map((c) => ({ label: c.value, key: c.key }))}
             sx={{ width: 300 }}

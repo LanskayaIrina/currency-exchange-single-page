@@ -140,6 +140,7 @@ export const CurrencyConverter = () => {
           <>
             <Box className="exchange-select-container" sx={{ width: 250 }}>
               <Autocomplete
+                className="custom-autocomplete"
                 selectOnFocus
                 disablePortal
                 isOptionEqualToValue={(option, value) => {
@@ -174,6 +175,7 @@ export const CurrencyConverter = () => {
             </Box>
             <Box className="exchange-select-container" sx={{ width: 250 }}>
               <Autocomplete
+                className="custom-autocomplete"
                 disablePortal
                 id="to"
                 isOptionEqualToValue={(option, value) => {

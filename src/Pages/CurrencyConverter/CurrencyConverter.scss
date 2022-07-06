@@ -1,13 +1,17 @@
-@use '../../styles/_colors.scss';
-
-$border-color: rgba(0, 0, 0, 0.3);
+@import "../../styles/_colors.scss";
 
 .rate-container {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   border: 1px solid $border-color;
   border-radius: 10px;
   padding: 2rem;
+  flex-direction: column;
+
+  @media (min-width: 650px) {
+    flex-direction: row;
+  }
 }
 
 .exchange-select-container {
@@ -16,5 +20,22 @@ $border-color: rgba(0, 0, 0, 0.3);
   }
   & .MuiFormControl-root {
     margin-bottom: 1rem;
+  }
+}
+
+.custom-autocomplete {
+  & .MuiAutocomplete-inputRoot {
+    &.Mui-focused .MuiOutlinedInput-notchedOutline {
+      border-color: $main-color;
+    }
+  }
+  & label.Mui-focused {
+    color: $main-color;
+  }
+}
+
+.MuiFormControl-root {
+  .MuiFilledInput-root:after {
+    border-bottom-color: $main-color;
   }
 }

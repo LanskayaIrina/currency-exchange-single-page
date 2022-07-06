@@ -1,11 +1,12 @@
+@import "../../styles/colors";
+
 .header {
-  //width: 100%;
   height: 5rem;
   display: flex;
   padding: 0 10%;
   justify-content: space-between;
   align-items: center;
-  background-color: #008080;
+  background-color: $main-color;
 }
 
 .logo {
@@ -26,12 +27,12 @@
 
       & a {
         text-decoration: none;
-        color: #88dfdf;
+        color:$light-main-color;
 
         &:hover,
         &:active,
         &.active {
-          color: #e6fcfc;
+          color: $active-light-main-color;
         }
       }
     }

@@ -1,9 +1,27 @@
-.rate-textField-container {
-  & .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input{
-  padding: 8px 14px;
-}
+@import "../../styles/colors";
 
-  & .css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root {
-    top: -6px
+.rate-textField-container {
+  & .MuiInputBase-input-MuiOutlinedInput-input {
+    padding: 8px 14px;
+  }
+
+  & .MuiFormLabel-root-MuiInputLabel-root {
+    top: -6px;
   }
 }
+
+.custom-autocomplete  {
+  & .MuiAutocomplete-inputRoot{
+    &.Mui-focused .MuiOutlinedInput-notchedOutline {
+      border-color: $main-color;
+    }
+  }
+  & label.Mui-focused {
+    color: $main-color;
+  }
+}
+
+
+
+
+
