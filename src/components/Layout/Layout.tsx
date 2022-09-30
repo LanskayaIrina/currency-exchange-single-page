@@ -1,5 +1,6 @@
 import React from "react";
-import { MainNavigation } from "./MainNavigation";
+
+import { Header } from "./Header";
 
 import "./Layout.scss";
 
@@ -8,7 +9,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   return (
     <div>
-      <MainNavigation />
+      <Header />
       <main className="main">{children}</main>
     </div>
   );

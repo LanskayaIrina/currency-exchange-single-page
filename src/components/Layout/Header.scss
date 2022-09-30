@@ -1,0 +1,27 @@
+@import "../../styles/colors";
+
+.header {
+  height: 5rem;
+  display: flex;
+  padding: 0 10%;
+  justify-content: space-between;
+  align-items: center;
+  background-color: $main-color;
+}
+
+.logo {
+  font-size: 2rem;
+  color: white;
+}
+
+.currency-container {
+  display: flex;
+}
+
+.currency-value {
+  color: white;
+
+  &:first-of-type {
+    margin-right: 2em;
+  }
+}
